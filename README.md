@@ -51,12 +51,6 @@ The tool needs these items:
 
 The tool uses the running client to authenticate. The client can be in the menu. The client does not need to be in a game.
 
-The compiled tool includes the Chromium browser. You do not install a browser for the compiled tool.
-
-The source form does not include the browser. Do this to install it for the source form:
-
-`python -m playwright install chromium`
-
 You do not need a special key for basic use.
 
 ## Install
@@ -66,8 +60,6 @@ You can run the tool in two ways.
 ### The compiled tool
 
 Download the compiled tool from the Releases page on GitHub. The file has the name collector.exe. Put the file anywhere. Run the file in a command prompt.
-
-The compiled tool includes the Chromium browser. You do not need to install a browser for the compiled tool.
 
 ### From source
 
@@ -497,7 +489,7 @@ This section gives a short summary.
 | Problem | Cause | Solution |
 |---|---|---|
 | The tool shows an error about the client. | The League client is not running. | Start the League client and log in. Run the command again. |
-| The tool shows an error about the browser. | The Chromium browser is not installed. | The compiled tool includes the browser. If you use the source form, run `python -m playwright install chromium`. |
+| The tool shows an error about the browser. | The Chromium browser is not installed. | Run `python -m playwright install chromium`. |
 | The tool cannot find a player. | The tool cannot resolve the name. | The player is not a friend of the current summoner. Give the PUUID. |
 | The tool says that a game has no replay. | Riot Games removed the replay. | Try another game, or use --patch with a recent patch. |
 | The tool rejected a download. | The download is not a valid replay file. | This is normal. The tool records the download in excluded.tsv. |
