@@ -16,14 +16,9 @@ The tool collects replay files. A replay file is a record of one game. The tool 
 
 ## Requirements
 
-The tool needs these items:
+The League client. The client must be running and you must be logged in.
 
-- Windows 10 or newer.
-- The League client. The client must be running and you must be logged in.
-
-The tool uses the running client to authenticate. The client can be in the menu. The client does not need to be in a game.
-
-You do not need a special key for basic use.
+You do not need a API key for use.
 
 
 ## Example Usage
