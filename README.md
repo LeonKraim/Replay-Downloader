@@ -218,7 +218,7 @@ Do this to gather the replays of a specific player:
 2. Replace PLAYER_NAME with the name of the player.
 3. Press Enter.
 
-The tool can find a player by name if that player is your friend. For all other players, set the environment variable RIOT_API_KEY. Read the section "Player references".
+The tool finds a player by name only if that player is your friend. For all other players, give the PUUID. Read the section "Player references".
 
 ### Gather from one patch
 
@@ -360,10 +360,10 @@ The tool resolves a PUUID directly. The tool showed the same PUUID:
 74fb2c08-8e2d-5556-8838-c1d94f808abc
 ```
 
-The tool cannot resolve a name without a key or the client. The tool showed:
+The tool cannot resolve a name that is not a friend. The tool showed:
 
 ```
-error: cannot resolve 'NotARealPlayerXyz_9999' without a Riot API key. The client only searches friends and its own platform. Set RIOT_API_KEY to resolve any name, or pass a PUUID.
+error: cannot resolve 'NotARealPlayerXyz_9999'. The tool only searches the friend list of the current summoner. Give a friend, or pass a PUUID.
 ```
 
 ## Rules
@@ -400,22 +400,15 @@ You can give the player in three forms:
 3. A summoner name.
    Example: `Faker`
 
+The tool needs no key. The tool uses the running client only.
+
 The tool finds the player in this order:
 
 1. If you give a PUUID, the tool uses it directly.
-2. If you give a Riot ID, the tool uses the Riot API. The tool needs the environment variable RIOT_API_KEY.
-3. If you give a summoner name, the tool looks in the friend list of the current summoner. If the player is not in the friend list, the tool needs the environment variable RIOT_API_KEY.
+2. The tool looks in the friend list of the current summoner.
+3. The tool searches the platform of the client.
 
-Do this to set the key:
-
-1. Get a key from Riot Games.
-2. Set the environment variable RIOT_API_KEY.
-
-In the command prompt:
-
-`set RIOT_API_KEY=your-key`
-
-Then run the command.
+The tool finds a player by name only if that player is your friend. For all other players, give the PUUID of the player.
 
 ## The output directory
 
@@ -465,6 +458,6 @@ This section gives a short summary.
 |---|---|---|
 | The tool shows an error about the client. | The League client is not running. | Start the League client and log in. Run the command again. |
 | The tool shows an error about the browser. | The Chromium browser is not installed. | Run `python -m playwright install chromium`. |
-| The tool cannot find a player. | The tool cannot resolve the name. | Set the environment variable RIOT_API_KEY. Or give the PUUID. |
+| The tool cannot find a player. | The tool cannot resolve the name. | The player is not a friend of the current summoner. Give the PUUID. |
 | The tool says that a game has no replay. | Riot Games removed the replay. | Try another game. |
 | The tool rejected a download. | The download is not a valid replay file. | This is normal. The tool records the download in excluded.tsv. |
