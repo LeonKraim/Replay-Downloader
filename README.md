@@ -25,6 +25,15 @@ The tool uses the running client to authenticate. The client can be in the menu.
 
 You do not need a special key for basic use.
 
+
+## Example Usage
+
+`collector.exe gather --patch 16.14 --max 10`
+
+`gather` will automatically download random replays
+
+`collector.exe get EUW1_7929523534`
+
 ## Install
 
 You can run the tool in two ways.
