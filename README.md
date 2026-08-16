@@ -14,33 +14,6 @@ The tool uses the League client to get access to Riot Games. The League client m
 The tool collects replay files. A replay file is a record of one game. The tool writes the replay files to the output directory.
 
 
-## Terms
-
-The table shows the meaning of the terms that this document uses.
-
-| Term | Meaning |
-|---|---|
-| Gather | The complete process of finding and downloading replays. |
-| Match history | The list of games that a player played. |
-| Replay | A record of one game. A replay file has the .rofl extension. |
-| Player graph | The network of players who played together. Two players are connected if they played in the same game. |
-| Spiral | The way the tool walks from one player to the players who played with that player. |
-| Seed player | The first player that a gather starts with. |
-| Rules | The options that select the games, for example --patch or --max. |
-| PUUID | The permanent ID of a player account. |
-| SGP | The Spectator Game Protocol. The service that stores the replay files. |
-
-The word "gather" is the name of the complete collection process. The process has these steps:
-
-1. The tool starts with one player.
-2. The tool reads the match history of that player. The match history is the list of games that the player played.
-3. The tool selects the games that pass the rules.
-4. The tool downloads the replay of each selected game.
-5. The tool finds the other players in those games.
-6. The tool repeats step 2 for each of those players.
-
-The process repeats. The tool walks from player to player through the player graph. The tool does not need a list of players. The tool finds the players by itself.
-
 ## Requirements
 
 The tool needs these items:
@@ -84,7 +57,7 @@ The table shows all commands.
 
 | Command | What the command does |
 |---|---|
-| gather | Walks through players and downloads replays. |
+| gather | Walks through players and downloads random replays automatically without needing any directions. |
 | get | Downloads one specific game. |
 | status | Shows the progress of a gather command. |
 | resolve | Finds the PUUID of a player. |
