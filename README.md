@@ -95,7 +95,7 @@ This example shows the version command:
 The tool shows:
 
 ```
-replay-downloader v0.1.0
+replay-downloader v0.2.0
 ```
 
 ## The gather command
