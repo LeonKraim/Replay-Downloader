@@ -1,0 +1,20 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "replay-downloader"
+version = "0.1.0"
+description = "Replay Downloader - League of Legends"
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = [
+    "playwright>=1.40",
+    "zstandard>=0.21",
+]
+
+[project.scripts]
+replay-downloader = "replay_downloader.cli:main"
+
+[tool.setuptools]
+packages = ["replay_downloader"]

@@ -1,0 +1,49 @@
+# Acquired replay data — not part of the repo (large binary corpus)
+downloads/
+
+# CLI state files — created by running the tool (default output = current dir)
+candidates.tsv
+excluded.tsv
+visited.txt
+frontier.txt
+gather.log
+
+# PyInstaller build output
+dist/
+build/
+*.spec
+
+# Scratch: WAD extractions / analysis artifacts from recon (game-client content)
+_sc/
+_wad/
+
+# Third-party reference sources consulted during recon (not project code)
+_src/
+
+# Scratch / runtime data containing player identifiers (PUUIDs) or raw dumps
+meta/excluded.tsv
+meta/candidates.tsv
+meta/candidates_all.tsv
+meta/candidates.jsonl
+meta/raw_all.jsonl
+meta/visited_puuids.txt
+meta/frontier.txt
+meta/enum_state.json
+meta/enum_log.txt
+meta/*.log
+meta/client_settings.json
+
+# Scraped reference HTML / test artifacts
+meta/*.html
+meta/test_*
+meta/validation_test.tsv
+meta/test_parsed.tsv
+
+# Local Riot client lockfile (contains ephemeral session credentials)
+lockfile
+
+# OS / editor noise
+Thumbs.db
+.DS_Store
+__pycache__/
+*.pyc
