@@ -48,11 +48,12 @@ The tool needs these items:
 
 - Windows 10 or newer.
 - The League client. The client must be running and you must be logged in.
-- The Chromium browser for Playwright.
 
 The tool uses the running client to authenticate. The client can be in the menu. The client does not need to be in a game.
 
-The Chromium browser must be installed. The compiled tool does not include the browser. Do this to install it:
+The compiled tool includes the Chromium browser. You do not install a browser for the compiled tool.
+
+The source form does not include the browser. Do this to install it for the source form:
 
 `python -m playwright install chromium`
 
@@ -66,9 +67,7 @@ You can run the tool in two ways.
 
 Download the compiled tool from the Releases page on GitHub. The file has the name collector.exe. Put the file anywhere. Run the file in a command prompt.
 
-The compiled tool needs the Chromium browser. Do this to install it:
-
-`python -m playwright install chromium`
+The compiled tool includes the Chromium browser. You do not need to install a browser for the compiled tool.
 
 ### From source
 
@@ -204,6 +203,32 @@ This is what the output means:
 | [ok=1] | The number of valid replays so far. |
 | reached max 2 | The tool downloaded 2 valid replays. The tool stopped. |
 
+### Real example: the default patch rule
+
+This example shows a real gather without the --patch rule. The tool used the last 3 patches:
+
+`collector.exe gather f9cefdf4-ea86-56e0-9138-d296106b8b54 --max 1`
+
+The tool showed:
+
+```
+no --patch given: keeping only the last 3 patches (16.16, 16.15, 16.14). Riot removes replays of older patches from the server. Use --patch to choose other patches, including older ones.
+=== gather start: seeds=1 queued=1 patches=['16.14', '16.15', '16.16'] map=any max=1 workers=1 min_gap=1.5s ===
+status: downloaded=0 pending=0 candidates=0 excluded=0
+  player f9cefdf4-ea8 games=934 new_candidates=934 queued=6330
+  player 6df61fb5-a58 games=981 new_candidates=1914 queued=13262
+  player ba06c174-6c6 games=970 new_candidates=2883 queued=20464
+  player ebd67393-850 games=980 new_candidates=3862 queued=24483
+  player 001b6b32-48b games=994 new_candidates=4855 queued=30944
+status: downloaded=0 pending=1024 candidates=1024 excluded=0
+  OK  EUW1_7952256561 patch=16.16 len=1546.7s 12950889 bytes [ok=1]
+status: downloaded=1 pending=1023 candidates=1024 excluded=0
+=== reached max 1 ===
+=== gather done: downloaded=1 excluded=0 pending=1023 ===
+```
+
+The tool read the current patch from the League client. The tool used the last 3 patches. The tool downloaded a valid replay from patch 16.16. The tool did not need a new version for the current patch.
+
 ### Gather from the current summoner
 
 Do this to gather the replays of the account that is logged in:
@@ -212,7 +237,7 @@ Do this to gather the replays of the account that is logged in:
    `collector.exe gather`
 2. Press Enter.
 
-The tool starts with the current summoner. The tool downloads the replays.
+The tool starts with the current summoner. The tool downloads the replays of the last 3 patches.
 
 ### Gather from a player name
 
@@ -379,7 +404,7 @@ The table shows all rules.
 
 | Option | What the rule does | Default |
 |---|---|---|
-| --patch | Keeps only the games from this patch. Use the option several times for several patches. | No rule |
+| --patch | Keeps only the games from this patch. Use the option several times for several patches. | The last 3 patches |
 | --map | Keeps only the games from this map. Use 11 for Summoner's Rift. Use 12 for Howling Abyss. | No rule |
 | --min-length | Removes the games that are shorter than this number of seconds. Use 300 to remove remakes. | No rule |
 | --max | Stops the gather after this number of valid replays. | No limit |
@@ -388,7 +413,17 @@ The table shows all rules.
 | --min-gap | Waits at least this number of seconds between requests. | 1.5 |
 | --out | Uses this directory for the output. | The current directory |
 
-There is no rule by default. The tool keeps every game that it finds.
+The --patch rule has a default value. Riot Games removes the replay of an old game from the server after a few patches. The game stays in the match history. The replay is gone. The tool downloads only the replays that Riot Games still stores.
+
+By default the tool keeps the games of the last 3 patches. The current patch is 16.16. The tool reads the current patch from the League client. The tool adjusts automatically when a new patch starts. You do not need a new version of the tool.
+
+Use the --patch rule to keep other patches, including older patches. The tool keeps exactly the patches that you give:
+
+`collector.exe gather "PLAYER_NAME" --patch 16.16 --patch 16.15 --patch 16.14 --patch 15.24`
+
+If the replay of an old game is gone, the download fails. Read the section Troubleshooting.
+
+For all other rules, there is no rule by default. The tool keeps every other game that it finds.
 
 The tool always removes a download that is not a valid replay file. This is not a rule. This is a check. The tool cannot use a download that is not a valid replay file.
 
@@ -462,7 +497,7 @@ This section gives a short summary.
 | Problem | Cause | Solution |
 |---|---|---|
 | The tool shows an error about the client. | The League client is not running. | Start the League client and log in. Run the command again. |
-| The tool shows an error about the browser. | The Chromium browser is not installed. | Run `python -m playwright install chromium`. |
+| The tool shows an error about the browser. | The Chromium browser is not installed. | The compiled tool includes the browser. If you use the source form, run `python -m playwright install chromium`. |
 | The tool cannot find a player. | The tool cannot resolve the name. | The player is not a friend of the current summoner. Give the PUUID. |
-| The tool says that a game has no replay. | Riot Games removed the replay. | Try another game. |
+| The tool says that a game has no replay. | Riot Games removed the replay. | Try another game, or use --patch with a recent patch. |
 | The tool rejected a download. | The download is not a valid replay file. | This is normal. The tool records the download in excluded.tsv. |

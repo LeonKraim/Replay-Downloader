@@ -114,12 +114,20 @@ class State:
     # -- counts -----------------------------------------------------------
     def count(self, patch_filter=None):
         """Return (downloaded, pending, candidates, excluded) for games that
-        match patch_filter (a two-part patch like '16.14', or None for all)."""
+        match patch_filter: None for all games, a two-part patch like '16.14',
+        or a set of such patches."""
         def patch_of(version):
             if not version:
                 return None
             parts = version.split(".")
             return f"{parts[0]}.{parts[1]}" if len(parts) >= 2 else None
+
+        def _keep(game_patch):
+            if patch_filter is None or gi is None:
+                return True
+            if isinstance(patch_filter, (set, frozenset)):
+                return game_patch in patch_filter
+            return game_patch == patch_filter
 
         excl = self.load_excluded()
         done, pending, total = 0, 0, 0
@@ -131,9 +139,8 @@ class State:
                     p = ln.rstrip("\n").split("\t")
                     if len(p) < 2 or not p[1].isdigit():
                         continue
-                    if patch_filter is not None and gi is not None:
-                        if patch_of(p[gi] if gi < len(p) else None) != patch_filter:
-                            continue
+                    if not _keep(patch_of(p[gi] if gi is not None and gi < len(p) else None)):
+                        continue
                     total += 1
                     key = f"{p[0]}_{p[1]}"
                     if key in excl:

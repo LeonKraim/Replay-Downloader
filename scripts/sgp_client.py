@@ -75,6 +75,20 @@ def get_rso_token():
     return d.get("token") or d.get("accessToken")
 
 
+def current_version():
+    """The current game version from the running client, for example
+    '16.16.8049184+branch.releases-16-16...'. Returns None if it cannot be
+    read. The version comes from the client's own patch API, so it follows
+    new patches automatically without a new release of the tool."""
+    try:
+        d = _local_get("/lol-patch/v1/game-version")
+        if isinstance(d, str) and d.strip():
+            return d.strip()
+    except Exception:  # noqa: BLE001
+        pass
+    return None
+
+
 class SGPClient:
     """Reusable SGP client backed by a persistent headless-Chromium context.
 
@@ -174,6 +188,21 @@ class SGPClient:
         raise SGPError(f"exhausted retries for {url}")
 
     # -- public API ----------------------------------------------------------
+    def current_version(self):
+        """The current game version, for example '16.16.0.7044128'.
+
+        Prefers the running client's patch API; falls back to the SGP server's
+        version endpoint. Returns None if neither can be read."""
+        v = current_version()
+        if v:
+            return v
+        try:
+            raw = self._request("/observer-mode/rest/consumer/version")
+            text = raw.decode("utf-8", "replace").strip().strip('"')
+            return text or None
+        except SGPError:
+            return None
+
     def get_summary(self, puuid, start=0, count=100):
         """Return list of game dicts from a player's match summary.
 

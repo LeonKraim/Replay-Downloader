@@ -16,7 +16,7 @@ import queue as _queue
 import threading
 import time
 
-from .client import SGPClient
+from .client import SGPClient, current_version
 from .state import State
 
 # Floor that only excludes truncated/junk downloads. A real ROFL2 is far larger.
@@ -27,6 +27,10 @@ MAX_PAGES_PER_PLAYER = 20      # safety cap: at most 2000 games per player
 # turns them on per run via --patch, --map, --min-length.
 RECOMMENDED_SR_MAP = 11        # Summoner's Rift
 RECOMMENDED_MIN_LENGTH_S = 300  # skip remakes / instant surrenders
+# Riot purges replays from the SGP server after a few patches. When the user
+# gives no --patch, gather defaults to this many most recent patches.
+DEFAULT_RECENT_PATCHES = 3
+PATCHES_PER_SEASON = 24        # season rollover: 15.1 follows 14.24
 
 
 def patch_of(version):
@@ -34,6 +38,23 @@ def patch_of(version):
         return None
     parts = version.split(".")
     return f"{parts[0]}.{parts[1]}" if len(parts) >= 2 else None
+
+
+def prev_patch(patch):
+    """The patch before 'X.Y', e.g. '16.16' -> '16.15'; across a season
+    rollover '16.1' -> '15.24'. Returns None for the earliest known patch."""
+    if not patch or "." not in patch:
+        return None
+    try:
+        major, _, minor = patch.partition(".")
+        major, minor = int(major), int(minor)
+    except (TypeError, ValueError):
+        return None
+    if minor > 1:
+        return f"{major}.{minor - 1}"
+    if major <= 1:
+        return None
+    return f"{major - 1}.{PATCHES_PER_SEASON}"
 
 
 class Gatherer:
@@ -75,6 +96,33 @@ class Gatherer:
         if (rec.get("gameLength_s") or 0) < self.min_length:
             return "short"
         return None
+
+    def _resolve_patches(self, sgp):
+        """When the user gave no --patch, default to the last few patches that
+        Riot still stores on the server. The current patch is read from the
+        running client at runtime, so a new patch needs no new build of the
+        tool. An explicit --patch always overrides the default."""
+        if self.patch_set:
+            return self.patch_set
+        version = current_version() or sgp.current_version()
+        current = patch_of(version)
+        if not current:
+            self.state.log(
+                "no --patch given and the current patch could not be read: "
+                "keeping every game (old replays may fail with unavailable)")
+            return set()
+        patches = []
+        p = current
+        while p and len(patches) < DEFAULT_RECENT_PATCHES:
+            patches.append(p)
+            p = prev_patch(p)
+        self.patch_set = set(patches)
+        self.state.log(
+            f"no --patch given: keeping only the last {len(patches)} patches "
+            f"({', '.join(patches)}). Riot removes replays of older patches "
+            f"from the server. Use --patch to choose other patches, including "
+            f"older ones.")
+        return self.patch_set
 
     def _cutoff_ms(self):
         """Earliest known target-patch game, minus a 1-day margin. Used to stop
@@ -297,6 +345,7 @@ class Gatherer:
     def run(self, seeds):
         """Seed the spiral with players and run until max, plateau, or done."""
         with SGPClient() as sgp:
+            self._resolve_patches(sgp)
             frontier = [s for s in self.state.load_frontier()
                         if s not in self.state.load_visited()]
             visited = self.state.load_visited()
@@ -380,9 +429,7 @@ class Gatherer:
         return {"downloaded": done, "excluded": n_excl, "pending": pending}
 
     def _count_filter(self):
-        if len(self.patch_set) == 1:
-            return next(iter(self.patch_set))
-        return None
+        return self.patch_set or None
 
 
 def _parse(path):

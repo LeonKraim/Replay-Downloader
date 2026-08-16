@@ -16,6 +16,7 @@ if _SCRIPTS not in sys.path:
 from sgp_client import (  # noqa: E402,F401
     SGPClient,
     SGPError,
+    current_version,
     get_rso_token,
     lockfile_parts,
 )
@@ -28,4 +29,5 @@ def current_puuid():
     return d.get("puuid")
 
 
-__all__ = ["SGPClient", "SGPError", "get_rso_token", "lockfile_parts", "current_puuid"]
+__all__ = ["SGPClient", "SGPError", "current_version", "get_rso_token",
+           "lockfile_parts", "current_puuid"]
