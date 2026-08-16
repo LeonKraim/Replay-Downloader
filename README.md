@@ -1,6 +1,11 @@
-# Replay Downloader - League of Legends
+<p align="center">
+  <img src="assets/collector.png" width="100" height="100" alt="The Collector logo">
+</p>
 
-Replay Downloader is a command line tool. It downloads League of Legends replay files.
+# The Collector
+
+
+The Collector is a command line tool. It downloads League of Legends replay files.
 
 A replay file has the .rofl extension. A replay is a record of one game. You can open a replay file in the League client and watch the game again.
 
@@ -59,7 +64,7 @@ You can run the tool in two ways.
 
 ### The compiled tool
 
-Download the compiled tool from the Releases page on GitHub. The file has the name ReplayDownloader.exe. Put the file anywhere. Run the file in a command prompt.
+Download the compiled tool from the Releases page on GitHub. The file has the name collector.exe. Put the file anywhere. Run the file in a command prompt.
 
 The compiled tool needs the Chromium browser. Do this to install it:
 
@@ -81,7 +86,7 @@ Do these steps:
 
 You can also install the tool with `python -m pip install .`. Then type `replay-downloader`.
 
-This document shows both forms. The form `ReplayDownloader.exe` is the compiled tool. The form `python replay-downloader.py` is the source form.
+This document shows both forms. The form `collector.exe` is the compiled tool. The form `python replay-downloader.py` is the source form.
 
 ## Commands
 
@@ -103,17 +108,17 @@ You run a command in a command prompt. You type the command and press Enter.
 
 Use this form:
 
-`ReplayDownloader.exe COMMAND OPTIONS`
+`collector.exe COMMAND OPTIONS`
 
 Or the source form:
 
 `python replay-downloader.py COMMAND OPTIONS`
 
-The examples in this document use the compiled form. Replace `ReplayDownloader.exe` with `python replay-downloader.py` to use the source form.
+The examples in this document use the compiled form. Replace `collector.exe` with `python replay-downloader.py` to use the source form.
 
 This example shows the version command:
 
-`ReplayDownloader.exe version`
+`collector.exe version`
 
 The tool shows:
 
@@ -132,7 +137,7 @@ A gather starts with one seed player. The gather produces a folder of replay fil
 This example shows a complete gather:
 
 1. You type this command:
-   `ReplayDownloader.exe gather "Alice" --patch 16.14 --max 10`
+   `collector.exe gather "Alice" --patch 16.14 --max 10`
 2. The tool finds the player Alice.
 3. The tool reads the match history of Alice. The match history has 200 games.
 4. The tool applies the rule --patch 16.14. The tool keeps 12 games. The tool removes the other 188 games.
@@ -166,7 +171,7 @@ The gather stops when one of these conditions is true:
 
 This example shows a real gather. The tool gathered the replays of the current summoner. The command limited the gather to patch 16.14 and to 2 replays:
 
-`ReplayDownloader.exe gather --patch 16.14 --max 2`
+`collector.exe gather --patch 16.14 --max 2`
 
 The tool showed:
 
@@ -204,7 +209,7 @@ This is what the output means:
 Do this to gather the replays of the account that is logged in:
 
 1. Type this command:
-   `ReplayDownloader.exe gather`
+   `collector.exe gather`
 2. Press Enter.
 
 The tool starts with the current summoner. The tool downloads the replays.
@@ -214,7 +219,7 @@ The tool starts with the current summoner. The tool downloads the replays.
 Do this to gather the replays of a specific player:
 
 1. Type this command:
-   `ReplayDownloader.exe gather "PLAYER_NAME"`
+   `collector.exe gather "PLAYER_NAME"`
 2. Replace PLAYER_NAME with the name of the player.
 3. Press Enter.
 
@@ -225,7 +230,7 @@ The tool finds a player by name only if that player is your friend. For all othe
 Do this to gather the replays of one patch only:
 
 1. Type this command:
-   `ReplayDownloader.exe gather "PLAYER_NAME" --patch 16.14`
+   `collector.exe gather "PLAYER_NAME" --patch 16.14`
 2. Replace PLAYER_NAME with the name of the player.
 3. Press Enter.
 
@@ -236,7 +241,7 @@ The tool keeps the games from patch 16.14. The tool removes all other games.
 Do this to stop after a set number of replays:
 
 1. Type this command:
-   `ReplayDownloader.exe gather "PLAYER_NAME" --patch 16.14 --max 500`
+   `collector.exe gather "PLAYER_NAME" --patch 16.14 --max 500`
 2. Replace PLAYER_NAME with the name of the player.
 3. Press Enter.
 
@@ -244,13 +249,13 @@ The tool stops when it has downloaded 500 valid replays.
 
 Do this to walk through a set number of players only:
 
-`ReplayDownloader.exe gather "PLAYER_NAME" --max-players 100`
+`collector.exe gather "PLAYER_NAME" --max-players 100`
 
 ### Gather without download
 
 Do this to find games without downloading the replays:
 
-`ReplayDownloader.exe gather "PLAYER_NAME" --no-download`
+`collector.exe gather "PLAYER_NAME" --no-download`
 
 The tool writes the games to the candidates file. The tool does not download the replays.
 
@@ -261,7 +266,7 @@ The get command downloads one specific game.
 Do this:
 
 1. Type this command:
-   `ReplayDownloader.exe get EUW1_7929523534`
+   `collector.exe get EUW1_7929523534`
 2. Replace EUW1_7929523534 with the game ID.
 3. Press Enter.
 
@@ -269,7 +274,7 @@ The tool downloads the replay to the downloads directory.
 
 You can also use a hyphen in the game ID:
 
-`ReplayDownloader.exe get EUW1-7929523534`
+`collector.exe get EUW1-7929523534`
 
 ### Real example
 
@@ -296,7 +301,7 @@ The status command shows the progress of a gather command.
 
 Do this:
 
-`ReplayDownloader.exe status`
+`collector.exe status`
 
 The tool shows:
 
@@ -342,7 +347,7 @@ A PUUID is the permanent ID of a player account.
 
 Do this:
 
-`ReplayDownloader.exe resolve "PLAYER_NAME"`
+`collector.exe resolve "PLAYER_NAME"`
 
 The tool shows the PUUID.
 
@@ -416,7 +421,7 @@ The tool writes all data to the output directory. The default output directory i
 
 Use --out to use a different directory:
 
-`ReplayDownloader.exe gather --out D:\replays`
+`collector.exe gather --out D:\replays`
 
 The table shows the content of the output directory.
 
