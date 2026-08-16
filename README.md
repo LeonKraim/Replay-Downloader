@@ -35,7 +35,7 @@ You can run the tool in two ways.
 
 ### The compiled tool
 
-Download the compiled tool from the Releases page on GitHub. The file has the name collector.exe. Put the file anywhere. Run the file in a command prompt.
+Download the compiled tool from the [Releases page](https://github.com/LeonKraim/Replay-Downloader/releases) on GitHub. The file has the name collector.exe. Put the file anywhere. Run the file in a command prompt.
 
 ### From source
 
