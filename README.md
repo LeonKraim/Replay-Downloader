@@ -113,11 +113,7 @@ This example shows a complete gather:
 7. The tool has 10 valid replays. The tool reached the value of --max. The tool stops.
 8. The tool writes the 10 replay files to the downloads directory.
 
-### The spiral
-
 The gather does not stop after the first player. The gather finds more players and more replays.
-
-The spiral works in this way:
 
 1. Each game has up to 10 players. The 12 games of Alice contain up to 120 players.
 2. The tool adds those players to the queue.
@@ -125,7 +121,7 @@ The spiral works in this way:
 4. The tool finds more games and more players.
 5. The process repeats.
 
-This is the spiral. The tool starts with one player. The tool walks outward through the players who played together. The tool finds more replays with each step.
+The tool starts with one player. The tool walks outward through the players who played together. The tool finds more replays with each step.
 
 The gather stops when one of these conditions is true:
 
